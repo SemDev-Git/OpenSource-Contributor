@@ -1,14 +1,11 @@
-// var express = require('express')
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
 dotenv.config({
     path: './.env'
 })
-// var cors = require('cors')
 const fetch = (...args)=>
     import('node-fetch').then(({default: fetch}) => fetch(...args))
-// var bodyParser = require('body-parser')
 import bodyParser from 'body-parser'
 const CLIENT_ID = process.env.CLIENT_ID
 const CLIENT_SECRET = process.env.CLIENT_SECRET
@@ -18,7 +15,6 @@ const app = express()
 app.use(cors());
 app.use(bodyParser.json());
 
-//code being passed from the frontend
 app.get('/getAccessToken', async function (req, res) {
     
     console.log(req.query.code);
