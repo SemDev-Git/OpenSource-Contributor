@@ -1,6 +1,8 @@
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
+import connectDB from "./db/index.js";
+
 dotenv.config({
     path: './.env'
 })
@@ -53,6 +55,15 @@ app.get('/getUserData', async function (req, res) {
 })
 
 
+
+
 app.listen(4000,function(){
+    connectDB()
+    .then(()=>{
+        console.log(`Server is running at port ${process.env.PORT}`)
+    })
+    .catch((err)=>{
+        console.log("MongoDB connection failed",err);
+})
     console.log("Cors server running on port 4000");
 })
