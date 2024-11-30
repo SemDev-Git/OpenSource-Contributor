@@ -1,16 +1,17 @@
 // var express = require('express')
-// var cors = require('cors')
 import express from 'express'
 import cors from 'cors'
-
-
+import dotenv from 'dotenv'
+dotenv.config({
+    path: './.env'
+})
+// var cors = require('cors')
 const fetch = (...args)=>
     import('node-fetch').then(({default: fetch}) => fetch(...args))
 // var bodyParser = require('body-parser')
 import bodyParser from 'body-parser'
-const CLIENT_ID = "Ov23licc0R42GG7WK2wm"
-const CLIENT_SECRET = "3e5337d302e86be5ec188e69cff07b310f9a4268"
-
+const CLIENT_ID = process.env.CLIENT_ID
+const CLIENT_SECRET = process.env.CLIENT_SECRET
 const app = express()
 
 
