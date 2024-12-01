@@ -6,6 +6,7 @@ import connectDB from "./db/index.js";
 dotenv.config({
     path: './.env'
 })
+
 const fetch = (...args)=>
     import('node-fetch').then(({default: fetch}) => fetch(...args))
 import bodyParser from 'body-parser'
@@ -53,9 +54,6 @@ app.get('/getUserData', async function (req, res) {
     })
     
 })
-
-
-
 
 app.listen(4000,function(){
     connectDB()

@@ -102,3 +102,93 @@ h1, h2, h3, p, li, ul, ol {
   font-size: 25px;
   margin-top: 20px;
 }
+
+#dashboard {
+  display: flex;
+  background: #CBEDD5;
+  height: 100%;
+  width: 100%;
+}
+
+#full-info, #small-info {
+  display: flex;
+  flex-direction: column;
+  background: #439A97;
+  width: 25%;
+  font-family: "Poppins";
+  align-items: center;
+}
+
+#small-info {
+  width: 5%;
+}
+
+.dash-name {
+   color: #fff;
+   font-size: 40px;
+}
+
+.edit-buttons {
+  border: none;
+  border-radius: 20px;
+  width: 75%;
+  margin-top: 20px;
+  padding: 5px;
+  font-family: "Poppins";
+  font-size: 15px;
+  color: #fff;
+  background: #97DECE;
+}
+
+.contributions {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+  color: #fff;
+  gap: 10px;
+}
+
+.dash-img {
+  margin-top: 20px;
+  width: 60%;
+  border-radius: 100%;
+}
+
+.small-buttons {
+  border-radius: 150%;
+  font-size: 15px;
+  padding: 15px;
+}
+
+i {
+  margin-top: 5px;
+}
+
+#main-feed {
+  flex-grow: 1; /* Take all remaining space */
+  background: #97DECE;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.current-project {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  font-size: 20px;
+  color: #439A97;
+}
+
+.projects {
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
+}
+
+.one-project {
+  background: #62B6B7;
+  padding: 80px 160px;
+  border-radius: 20px;
+  margin-right: 20px ;
+}

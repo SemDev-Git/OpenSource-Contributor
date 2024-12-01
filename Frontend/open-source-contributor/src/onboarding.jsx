@@ -1,26 +1,28 @@
 import './App.css'
+import Dashboard from './dashboard';
 import React, { useState } from 'react';
 
 export default function Onboarding() {
     const [currentStep, setCurrentStep] = useState(1); 
 
     const handleNext = () => {
-        if (currentStep < 3) {
+        if (currentStep < 4) {
             setCurrentStep(currentStep + 1); 
         }
     };
 
-    return (
-        <>
-            <section id="onboarding">
-                {currentStep === 1 && <Language />}
-                {currentStep === 2 && <Interest />}
-                {currentStep === 3 && <Hobbies />}
-                
+        if (currentStep < 4) {
+            return (
+                <section id="onboarding">
+                    {currentStep === 1 && <Language />}
+                    {currentStep === 2 && <Interest />}
+                    {currentStep === 3 && <Hobbies />}
                 <button className='next-button' onClick={handleNext}>Next</button>
-            </section>
-        </>
-    );
+                </section>
+            )
+        } else {
+            return <ThankYou/>
+        }
 }
 
 function Language() {
@@ -66,6 +68,28 @@ function Hobbies() {
             </div>
         </>
     );
+}
+
+function ThankYou() {
+    const [showDashboard, setShowDashboard] = useState(false);
+    return (
+        <>
+        {!showDashboard ? (
+                <section id='login'>
+                    <h1>and that's is it...</h1>
+                    <p>thank you for choosing to work with us!</p>
+                    <button 
+                        className='git-button' 
+                        onClick={() => setShowDashboard(true)}
+                    >
+                        Show me dashboard
+                    </button>
+                </section>
+            ) : (
+                <Dashboard />
+            )}
+        </>
+    ) 
 }
 
 function ButtonGroup({ buttons }) {
@@ -116,3 +140,4 @@ function ButtonGroup({ buttons }) {
         </div>
     );
 }
+
