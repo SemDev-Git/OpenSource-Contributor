@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import connectDB from "./db/index.js";
+import axios from 'axios';
 
 dotenv.config({
     path: './.env'
@@ -54,6 +55,23 @@ app.get('/getUserData', async function (req, res) {
     })
     
 })
+app.get('/api/repositories', async (req, res) => {
+    try {
+      // Fetch repositories from GitHub API (repositories with more than 100,000 stars)
+      const response = await axios.get('https://api.github.com/search/repositories?q=stars:%3E100000&sort=stars&order=desc');
+      const repositories = response.data.items.map(item => ({
+        id: item.id,
+        avatarUrl: item.owner.avatar_url,  // Avatar URL
+        title: item.name,  // Repository name
+      }));
+  
+      // Send the data to the frontend
+      res.json(repositories);
+    } catch (error) {
+      console.error('Error fetching data from GitHub API:', error);
+      res.status(500).json({ error: 'Failed to fetch data from GitHub API' });
+    }
+  });
 
 app.listen(4000,function(){
     connectDB()

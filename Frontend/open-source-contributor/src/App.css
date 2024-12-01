@@ -192,3 +192,58 @@ i {
   border-radius: 20px;
   margin-right: 20px ;
 }
+
+.container{
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  height: 700px;
+  width: 100%;
+  place-items: center;
+  background-color: #f5f5f5; 
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='16' height='16' fill='none' stroke-width='2' stroke='%23d4d4d4'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
+  background-size: cover;
+  background-repeat: no-repeat;
+
+
+}
+.card {
+  position: relative;
+  width: 250px; /* Set width for card */
+  height: 350px; /* Set height for card */
+  background-color: white;
+  border-radius: 10px;
+  transform-origin: bottom;
+  transition: transform 0.125s;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  grid-row: 1;
+  grid-column: 1;
+}
+
+.card:hover {
+  cursor: grabbing;
+}
+.card:active {
+  cursor: grabbing;
+}
+.card.is-front {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+}
+.avatar {
+  width: 80%;  /* Adjust image size */
+  height: 60%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+h3 {
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: bold;
+}
