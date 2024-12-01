@@ -3,18 +3,22 @@ import { useState } from 'react';
 import ezhanImage from './assets/ezhan.jpeg';
 
 export default function Dashboard() {
+    const [showNotifications, setShowNotifications] = useState(false);
+
     return (
         <>
+            {showNotifications && <Notifications />}
             <section id="dashboard">
-                <InformationTab />
+                <InformationTab
+                    toggleNotifications={() => setShowNotifications(!showNotifications)}
+                />
                 <MainFeed />
-                <Notifications/>
             </section>
         </>
-    )
+    );
 }
 
-function InformationTab() {
+export function InformationTab({toggleNotifications }) {
     const [showhalf, setShowhalf] = useState(true);
 
     return (
@@ -24,12 +28,23 @@ function InformationTab() {
                     <div id='full-info'>
                         <img className='dash-img' src={ezhanImage} alt="" />
                         <h2 className='dash-name'>Ezhan Javed</h2>
+                        <div className='contributions'>
+                            <i className="fa-solid fa-code"></i>
+                            <p>contributions: 20</p>
+                            <i className="fa-solid fa-timeline"></i>
+                            <p> date joined: 20</p>
+                        </div>
                         <button className='edit-buttons'>Edit Profile</button>
                         <button className='edit-buttons'>Add Projects</button>
-                        <div className='contributions'><i class="fa-solid fa-code"></i><p>contributions: 20</p> <i class="fa-solid fa-timeline"></i><p> date joined: 20</p></div>
-                        <button onClick={() => setShowhalf(true)} className='edit-buttons'><i class="fa-solid fa-arrow-left"></i></button>
+                        <div className='contributions'>
+                            <button onClick={() => setShowhalf(true)} className='notification-buttons'>
+                                <i className="fa-solid fa-arrow-left"></i>
+                            </button>
+                            <button onClick={toggleNotifications} className='notification-buttons'>
+                                <i class="fa-solid fa-bell"></i>
+                            </button>
+                        </div>
                     </div>
-
                 </>
             ) : (
                 <>
@@ -38,13 +53,19 @@ function InformationTab() {
                         <h2 className='dash-name'>EJ</h2>
                         <button className='small-buttons edit-buttons'>Edit</button>
                         <button className='small-buttons edit-buttons'>Add</button>
-                        <button onClick={() => setShowhalf(false)} className='small-buttons edit-buttons'><i class="fa-solid fa-arrow-right"></i></button>
+                        <button onClick={() => setShowhalf(false)} className='small-buttons edit-buttons'>
+                            <i className="fa-solid fa-arrow-right"></i>
+                        </button>
+                        <button onClick={toggleNotifications} className='small-buttons edit-buttons'>
+                            <i class="fa-solid fa-bell"></i>
+                        </button>
                     </div>
                 </>
             )}
         </>
     );
 }
+
 
 function MainFeed() {
     return (
@@ -117,29 +138,13 @@ function MyProjects() {
 }
 
 
-function Notifications() {
-    const [showNotification, setNotification] = useState(false);
-
+export function Notifications() {
     return (
         <>
-            {!showNotification ? (
-                <>
-                    <div id='notify'>
-                        <img className='dash-img' src={ezhanImage} alt="" />
-                        <h2 className='dash-name'>Ezhan Javed</h2>
-                        <button className='edit-buttons'>Edit Profile</button>
-                        <button className='edit-buttons'>Add Projects</button>
-                        <div className='contributions'><i class="fa-solid fa-code"></i><p>contributions: 20</p> <i class="fa-solid fa-timeline"></i><p> date joined: 20</p></div>
-                        <button onClick={() => setShowhalf(true)} className='edit-buttons'><i class="fa-solid fa-arrow-left"></i></button>
-                    </div>
+            <div id='notify'>
+                <h2>check out if anyone has tried to contact you...</h2>
+            </div>
 
-                </>
-            ) : (
-                <>
-    
-                </>
-            )}
         </>
     );
-
 }
