@@ -1,59 +1,72 @@
-import mongoose,{Schema} from "mongoose";
+import mongoose, { Schema } from "mongoose";
+
 const userSchema = new Schema(
-    {
-        username:{
-            type: String,
-            required:true,
-            unique: true,
-            lowercase: true,
-            trim: true,
-            index:true //used to make field searchable in an optimize way
-        },
-        fullname:{
-            type: String,
-            required:true,
-            trim: true,
-            index:true
-        },
-        avatar:{
-            type: String,//API AVATOR url
-            required:true
-        },
-        like:{
-            type: String
-        },
-        progLang:{
-            type:String
-        },
-        coreInterest:{
-            type:String
-        },
-        hobbies:{
-            type:String
-        },
-        projectAssign:{
-            type:String
-        },
-        contributionsTotal:{
-            type:Number,
-            default:0
-
-        },
-        projectID:{
-            type:mongoose.Schema.Types.ObjectId,
-            ref:'Project'
-        },
-        taskAssign: [
-            {
-              type: mongoose.Schema.Types.ObjectId,
-              ref: 'Task',
-            },
-        ],
-
+  {
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+      index: true, // Searchable
     },
-    {
-        timestamps:true //for created at and updated at
-    }
-)
-const User = mongoose.model("User", userSchema) 
-export default User
+    fullname: {
+      type: String,
+      required: true,
+      trim: true,
+      index: true,
+    },
+    avatar: {
+      type: String, // API avatar URL
+      required: true,
+    },
+    repos: {
+      type: [String], // Array of programming languages
+      default: [],
+    },
+    like: {
+      type: [Number], // Integer value for likes
+      default: [],
+    },
+    dislike: {
+      type: [Number], // Integer value for dislikes
+      default: [],
+    },
+    progLang: {
+      type: [String], // Array of programming languages
+      default: [],
+    },
+    coreInterest: {
+      type: [String], // Array of interests
+      default: [],
+    },
+    hobbies: {
+      type: [String], // Array of hobbies
+      default: [],
+    },
+    projectAssign: {
+      type: [Number], // Array of integers representing assigned projects
+      default: [],
+    },
+    contributionsTotal: {
+      type: Number,
+      default: 0,
+    },
+    projectID: {
+      type: [String], // Array of integers representing project IDs
+      default: [],
+    },
+    taskAssign: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Task",
+      },
+    ],
+  },
+  {
+    timestamps: true, // Created at and updated at
+  }
+);
+
+const User = mongoose.model("User", userSchema);
+export default User;

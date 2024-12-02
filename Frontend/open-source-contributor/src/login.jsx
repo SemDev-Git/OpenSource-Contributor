@@ -1,109 +1,97 @@
-import { useState } from 'react'
-import './App.css'
-import Onboarding from './onboarding'
-import { useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+import Onboarding from './onboarding.jsx'
+import Dashboard from './dashboard.jsx'
 
-const CLIENT_ID = "Ov23licc0R42GG7WK2wm"
+const CLIENT_ID = "Ov23licc0R42GG7WK2wm";
 
 function Login() {
-    const [rerender, setRerender] = useState(false)
-    const [userData, setUserData] = useState({})
-    //forward the user to the github login screen ( we pass in the client id)
-    //user is now on the github side and log in 
-    // when user decides to login... they get vack to localhost:3000
-    //but localhost:3000/?code??sdasdasdsafd
-    //use the code to get access token(code can only be used once)
+  const [userData, setUserData] = useState({});
+  const [repositories, setRepositories] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        const codeParam = urlParams.get("code");
-        console.log("Code in front-end: " + codeParam);
+  useEffect(() => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const codeParam = urlParams.get("code");
+    console.log("Code in front-end: " + codeParam);
 
-        //local storage is nice 
-        //leave our page for a while
-        //comeback and still logged in with Github
-
-        if (codeParam && (localStorage.getItem("accessToken") === null)) {
-            async function getAccessToken() {
-                await fetch("http://localhost:4000/getAccessToken?code=" + codeParam, {
-                    method: "GET"
-                }).then((response) => {
-                    return response.json()
-                }).then((data) => {
-                    console.log(data);
-                    if (data.access_token) {
-                        localStorage.setItem("accessToken", data.access_token)
-                        setRerender(!rerender)
-                    }
-                })
-            }
-            getAccessToken()
-        }
-
-
-    }, [])
-
-    async function getUserData() {
-        await fetch("http://localhost:4000/getUserData", {
+    if (codeParam && !localStorage.getItem("accessToken")) {
+      async function getAccessToken() {
+        try {
+          const response = await fetch(`http://localhost:4000/getAccessToken?code=${codeParam}`, {
             method: "GET",
-            headers: {
-                "Authorization": "Bearer " + localStorage.getItem("accessToken") //bearer Access Token
-            }
-        }).then((response) => {
-            return response.json()
-        }).then((data) => {
-            console.log(data);
-            setUserData(data)
-        })
+          });
+          const data = await response.json();
+          if (data.access_token) {
+            localStorage.setItem("accessToken", data.access_token);
+            getUserData(data.access_token);
+          } else {
+            throw new Error('Access token not found in response');
+          }
+        } catch (error) {
+          setError(error.message);
+          setIsLoading(false);
+        }
+      }
+      getAccessToken();
+    } else {
+      setIsLoading(false); 
     }
+  }, []);
 
+  async function getUserData(token) {
+    try {
+      const response = await fetch("http://localhost:4000/getUserData", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`, 
+        },
+      });
 
-    function LoginWithGithub() {
-        window.location.assign("https://github.com/login/oauth/authorize?client_id=" + CLIENT_ID + "&scope=user")
+      if (response.ok) {
+        const data = await response.json();
+        setUserData(data);
+        setRepositories(data.user.repos); 
+        setIsLoading(false);
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to fetch user data');
+      }
+    } catch (error) {
+      setError(error.message);
+      setIsLoading(false);
     }
+  }
 
-    return (
-        <div className='App'>
-            <header className='App-header'>
-                {localStorage.getItem("accessToken") ?
-                    <>
-                        <Onboarding />
-                    </>:
-                    <>
-                        <section id='login'>
-                            <h1>let's find you a project</h1>
-                            <p>there are more than <span className='highlight'>65,000</span> active projects on SEM right now</p>
-                            <div>
-                                <button className='git-button' onClick={LoginWithGithub}>
-                                    Login with GitHub
-                                </button>
-                            </div>
-                        </section>
-                    </>
-                }
-            </header>
-        </div>
+  function LoginWithGithub() {
+    window.location.assign(`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=repo`);
+  }
 
-    )
+  return (
+    <div className="App">
+      <header className="App-header">
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : localStorage.getItem("accessToken") ? (
+          <>
+            {userData.isNewUser ? (
+              <Onboarding />  
+            ) : (
+              <Dashboard />   
+            )}
+          </>
+        ) : (
+          <section id="login">
+            <h1>Let's find you a project</h1>
+            <button className="git-button" onClick={LoginWithGithub}>
+              Login with GitHub
+            </button>
+          </section>
+        )}
+      </header>
+    </div>
+  );
 }
 
-export default Login
-
-
-/*<h1>We have the accessToken</h1>
-                        <button onClick={() => {
-                            localStorage.removeItem("accessToken"); setRerender(!rerender)
-                        }}>
-                            Logout
-                        </button>
-                        <h3>Get User Data from GitHub API</h3>
-                        <button onClick={getUserData}>Get User Data</button>
-                        {Object.keys(userData).length !== 0 ?
-                            <>
-                                <h4>Hey there {userData.login}</h4>
-                            </>
-                            :
-                            <>
-                            </>
-                        }*/
+export default Login;

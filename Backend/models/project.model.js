@@ -2,9 +2,13 @@ import mongoose, {Schema} from "mongoose";
 import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 const projectSchema = new Schema(
     {
-        owner:{
+        username:{
             type: Schema.Types.ObjectId,
             ref:"User"
+        },
+        projectID: {
+            type: Number,
+            default: 0,
         },
         title:{
             type:String,
@@ -19,7 +23,7 @@ const projectSchema = new Schema(
 
         },
         gitlink:{
-            type: String,//Git url    
+            type: String,   
         },
     },{
         timestamps:true
