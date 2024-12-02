@@ -10,7 +10,7 @@ dotenv.config({ path: './.env' });
 
 const CLIENT_ID = "Ov23licc0R42GG7WK2wm";
 const CLIENT_SECRET = "6fe4fdedc39fd7849cf701e2e343e788ca17df34";
-const PORT = process.env.PORT || 4000;
+const PORT = 4000;
 
 const app = express();
 
