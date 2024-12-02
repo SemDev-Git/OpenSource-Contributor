@@ -1,6 +1,7 @@
 import './App.css'
 import { useState } from 'react';
 import { InformationTab, Notifications } from './dashboard';
+import SwipeableCards from './swip';
 
 export default function FindProjectsScreen() {
     const [showNotifications, setShowNotifications] = useState(false);
@@ -24,7 +25,7 @@ export default function FindProjectsScreen() {
 
 function FindProjectFeed({ toggleFilter }) {
     return (
-        <section id='project-feed'>
+        <section id='main-feed'>
             <FindProjectsList toggleFilter={toggleFilter} />
         </section>
     );
@@ -37,10 +38,15 @@ function FindProjectsList({ toggleFilter }) {
             <div className='current-project'>
                 <div className='line'><h2>find projects</h2><button className='filter-btn' onClick={toggleFilter}><i class="fa-solid fa-search"></i></button></div>
                 <div className='projects'>
-                    <div className='one-project'></div>
-                    <div className='one-project'></div>
-                    <div className='one-project'></div>
-                    <div className='one-project'></div>
+                    <div className='one-project'><SwipeableCards /></div>
+                    <div className='one-project'><SwipeableCards /></div>
+                    <div className='one-project'><SwipeableCards /></div>
+                    <div className='one-project'><SwipeableCards /></div>
+                    <div className='one-project'><SwipeableCards /></div>
+                    <div className='one-project'><SwipeableCards /></div>
+                    <div className='one-project'><SwipeableCards /></div>
+                    <div className='one-project'><SwipeableCards /></div>
+                    <div className='one-project'><SwipeableCards /></div>
                 </div>
             </div>
         </>
