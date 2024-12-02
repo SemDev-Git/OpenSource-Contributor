@@ -4,6 +4,11 @@ import dotenv from 'dotenv'
 import connectDB from "./db/index.js";
 import axios from 'axios';
 
+
+import userRoutes from './routes/userRoutes.js'
+import taskRoutes from './routes/taskRoutes.js'
+import projectRoutes from './routes/projectRoutes.js'
+
 dotenv.config({
     path: './.env'
 })
@@ -18,6 +23,19 @@ const app = express()
 
 app.use(cors());
 app.use(bodyParser.json());
+connectDB()
+.then(()=>{
+    console.log(`Server is running at port ${process.env.PORT}`)
+})
+.catch((err)=>{
+    console.log("MongoDB connection failed",err);
+})
+app.use(express.json());
+
+// Attach routes
+app.use(userRoutes);
+app.use(projectRoutes);
+app.use(taskRoutes);
 
 app.get('/getAccessToken', async function (req, res) {
     
@@ -74,12 +92,6 @@ app.get('/api/repositories', async (req, res) => {
   });
 
 app.listen(4000,function(){
-    connectDB()
-    .then(()=>{
-        console.log(`Server is running at port ${process.env.PORT}`)
-    })
-    .catch((err)=>{
-        console.log("MongoDB connection failed",err);
-})
+
     console.log("Cors server running on port 4000");
 })

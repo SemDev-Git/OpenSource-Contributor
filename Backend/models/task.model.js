@@ -24,4 +24,5 @@ const taskSchema=new Schema(
     }
 )
 taskSchema.plugin(mongooseAggregatePaginate)
-export const Task = mongoose.model("Task", taskSchema) 
+const Task = mongoose.model("Task", taskSchema) 
+export default Task

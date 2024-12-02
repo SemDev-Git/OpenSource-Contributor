@@ -1,6 +1,6 @@
 import mongoose, {Schema} from "mongoose";
 import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
-const projectSchema=new Schema(
+const projectSchema = new Schema(
     {
         owner:{
             type: Schema.Types.ObjectId,
@@ -26,4 +26,5 @@ const projectSchema=new Schema(
     }
 )
 projectSchema.plugin(mongooseAggregatePaginate)
-export const Project = mongoose.model("Project", projectSchema) 
+const Project = mongoose.model("Project", projectSchema) 
+export default Project

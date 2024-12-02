@@ -22,9 +22,6 @@ const userSchema = new Schema(
         like:{
             type: String
         },
-        dislike:{
-            type:String
-        },
         progLang:{
             type:String
         },
@@ -42,6 +39,10 @@ const userSchema = new Schema(
             default:0
 
         },
+        projectID:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'Project'
+        },
         taskAssign: [
             {
               type: mongoose.Schema.Types.ObjectId,
@@ -54,4 +55,5 @@ const userSchema = new Schema(
         timestamps:true //for created at and updated at
     }
 )
-export const User = mongoose.model("User", userSchema) 
+const User = mongoose.model("User", userSchema) 
+export default User
