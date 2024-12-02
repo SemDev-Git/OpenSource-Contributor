@@ -209,7 +209,7 @@ i {
   height: 700px;
   width: 100%;
   place-items: center;
-  background-color: #f5f5f5; 
+  background-color: #97DECE; 
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='16' height='16' fill='none' stroke-width='2' stroke='%23d4d4d4'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
   background-size: cover;
   background-repeat: no-repeat;
@@ -360,4 +360,14 @@ th {
 
 ul {
   margin: 10px 30px;
+}
+
+.new-buttons {
+  border: none;
+  background: #439A97;
+  font-size: 15px;
+  border-radius: 150%;
+  padding: 10px 15px;
+  color: #fff;
+  margin-bottom: 20px;
 }

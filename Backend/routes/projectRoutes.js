@@ -6,21 +6,35 @@ const router = express.Router();
 // Create a Project
 router.post('/api/projects', async (req, res) => {
   try {
-    // Validate the incoming request body
-    if (!req.body.title || !req.body.description) {
-      return res.status(400).json({ error: 'Title and description are required.' });
-    }
+      console.log('Request body:', req.body);
+      const { username, title, description, guidelines, gitlink } = req.body;
+      
+      if (!title || !description) {
+          return res.status(400).json({ error: 'Title and description are required.' });
+      }
 
-    // Create and save the project
-    const project = new Project(req.body);
-    const savedProject = await project.save();
+      const user = await User.findOne({ name: username });
+      if (!user) {
+          return res.status(404).json({ error: 'User not found.' });
+      }
 
-    res.status(201).json(savedProject);
+      const project = new Project({
+          username: user._id,
+          title: title,
+          description: description,
+          guidelines: guidelines,
+          gitlink: gitlink,
+      });
+
+      const savedProject = await project.save();
+      console.log('Project saved:', savedProject);
+      res.status(201).json(savedProject);
   } catch (error) {
-    console.error('Error creating project:', error.message);
-    res.status(500).json({ error: 'Internal Server Error: Unable to create project.' });
+      console.error('Error:', error);
+      res.status(500).json({ error: 'Internal Server Error: Unable to create project.' });
   }
 });
+
 
 // Delete a Project
 router.delete('/api/projects/:id', async (req, res) => {

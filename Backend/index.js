@@ -5,6 +5,8 @@ import connectDB from './db/index.js';
 import fetch from 'node-fetch';
 import bodyParser from 'body-parser';
 import User from './models/user.model.js'; // Import the User model
+import Project from './models/project.model.js'; // Import the User model
+import Task from './models/task.model.js'; // Import the User model
 
 import userRoutes from './routes/userRoutes.js';
 import taskRoutes from './routes/taskRoutes.js';
@@ -24,7 +26,7 @@ app.use(bodyParser.json());
 
 app.use('/users', userRoutes);
 app.use('/tasks', taskRoutes);
-app.use('/projects', projectRoutes);
+app.use('/projects', projectRoutes); // Make sure this line is correct
 
 // Connect to MongoDB
 connectDB()

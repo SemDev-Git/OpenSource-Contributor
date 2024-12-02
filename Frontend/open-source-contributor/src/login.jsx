@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Onboarding from './onboarding.jsx'
-import Dashboard from './dashboard.jsx'
+import Screen from './screen.jsx'
 
 const CLIENT_ID = "Ov23licc0R42GG7WK2wm";
 
@@ -78,7 +78,7 @@ function Login() {
             {userData.isNewUser ? (
               <Onboarding />  
             ) : (
-              <Dashboard />   
+              <Screen userData={userData} />   
             )}
           </>
         ) : (
