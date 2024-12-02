@@ -29,7 +29,7 @@ const SwipeableCards = ({ onNavigate }) => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await fetch('http://localhost:4000/api/projects');  // Replace with the correct API URL
+        const response = await fetch('https://opensource-contributor.onrender.com/api/projects');  // Replace with the correct API URL
         if (!response.ok) {
           throw new Error('Failed to fetch projects');
         }

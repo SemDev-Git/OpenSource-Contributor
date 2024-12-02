@@ -57,7 +57,7 @@ function AddProjectsList({ userData }) {
         console.log('Submitting project data:', projectData);
     
         try {
-            const response = await fetch('http://localhost:4000/api/projects', {
+            const response = await fetch('https://opensource-contributor.onrender.com/api/projects', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(projectData),

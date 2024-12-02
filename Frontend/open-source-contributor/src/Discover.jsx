@@ -7,7 +7,7 @@ const SwipeCards = () => {
 
   // Fetch repositories from the backend API
   useEffect(() => {
-    fetch("http://localhost:4000/api/repositories")
+    fetch("https://opensource-contributor.onrender.com/api/repositories")
       .then(response => response.json())
       .then(data => {
         setCards(data);  // Set the data fetched from the backend

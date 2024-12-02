@@ -19,7 +19,7 @@ function Login() {
     if (codeParam && !localStorage.getItem("accessToken")) {
       async function getAccessToken() {
         try {
-          const response = await fetch(`http://localhost:4000/getAccessToken?code=${codeParam}`, {
+          const response = await fetch(`https://opensource-contributor.onrender.com/getAccessToken?code=${codeParam}`, {
             method: "GET",
           });
           const data = await response.json();
@@ -42,7 +42,7 @@ function Login() {
 
   async function getUserData(token) {
     try {
-      const response = await fetch("http://localhost:4000/getUserData", {
+      const response = await fetch("https://opensource-contributor.onrender.com/getUserData", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`, 
