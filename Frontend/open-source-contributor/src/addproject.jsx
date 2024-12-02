@@ -49,7 +49,6 @@ function AddProjectsList({ userData }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const projectData = {
-            username: userData.name,
             title: formData.title,
             description: formData.description,
             guidelines: formData.guidelines,

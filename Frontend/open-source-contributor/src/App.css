@@ -371,3 +371,26 @@ ul {
   color: #fff;
   margin-bottom: 20px;
 }
+
+.cards-line {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.card {
+  height: 200px;
+  width: 250px;
+  background: #62B6B7;
+  text-align: center;
+}
+
+.card h3 {
+font-size: 25px;
+color: #CBEDD5;
+}
+
+.card p {
+  font-size: 12px;
+  color: #CBEDD5;
+}

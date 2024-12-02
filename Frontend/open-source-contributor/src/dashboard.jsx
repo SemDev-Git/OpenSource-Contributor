@@ -1,6 +1,7 @@
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ezhanImage from './assets/ezhan.jpeg';
+import SwipeableCards from './swip';
 
 export default function Dashboard({ userData, onNavigate }) {
     const [showNotifications, setShowNotifications] = useState(false);
@@ -13,7 +14,7 @@ export default function Dashboard({ userData, onNavigate }) {
                     toggleNotifications={() => setShowNotifications(!showNotifications)}
                     onNavigate={onNavigate}
                 />
-                <MainFeed onNavigate={onNavigate} />
+                <MainFeed userData={userData} onNavigate={onNavigate} />
             </section>
         </>
     );
@@ -66,45 +67,93 @@ export function InformationTab({ toggleNotifications, onNavigate }) {
     );
 }
 
-function MainFeed( {onNavigate}) {
+function MainFeed( {userData, onNavigate}) {
     return (
         <>
             <section id='main-feed'>
                 <CurrentProjects onNavigate={onNavigate} />
                 <FindProjects onNavigate={onNavigate} />
-                <MyProjects onNavigate={onNavigate} />
+                <MyProjects userData={userData} onNavigate={onNavigate} />
             </section>
         </>
     )
 }
 
-function CurrentProjects({onNavigate}) {
-    //If user won't have access to any project we need to show messsage to add projects
-    const [showCurrent, setCurrent] = useState(true);
+function CurrentProjects({ onNavigate }) {
+    // State to manage current visibility and project data
+    const [showCurrent, setShowCurrent] = useState(false);
+    const [projects, setProjects] = useState([]);
+    const [loading, setLoading] = useState(true); // To show loading state
+    const [error, setError] = useState(null); // To handle error state
+  
+    // Fetch projects when the component mounts
+    useEffect(() => {
+      const fetchProjects = async () => {
+        try {
+          const response = await fetch('http://localhost:4000/api/projects'); // Replace with the correct API URL
+          if (!response.ok) {
+            throw new Error('Failed to fetch projects');
+          }
+          const data = await response.json();
+  
+          // Limit to the first 3 projects
+          setProjects(data.slice(0, 3)); // Only get the first 3 projects
+          setLoading(false);
+        } catch (err) {
+          setError(err.message);
+          setLoading(false);
+        }
+      };
+  
+      fetchProjects();
+    }, []);
+  
+    if (loading) {
+      return <p>Loading projects...</p>;
+    }
+  
+    if (error) {
+      return <p>Error: {error}</p>;
+    }
+  
     return (
-        <>
-            {!showCurrent ? (
-                <>
-                    <div className='current-project'>
-                        <div className='line'><h2>current projects</h2> - <button onClick={() => onNavigate('currentproject')}>edit</button></div>
-                        <p>oh, no! you don't have any active projects right now!</p>
-                    </div>
-                </>
-            ) : (
-                <>
-                    <div className='current-project'>
-                        <div className='another line'><h2>current projects</h2> - <button className='new-buttons' onClick={() => onNavigate('currentproject')}><i className="fa-solid fa-arrow-left"></i></button></div>
-                        <div className='projects'>
-                            <div className='one-project'></div>
-                            <div className='one-project'></div>
-                            <div className='one-project'></div>
-                        </div>
-                    </div>
-                </>
-            )}
-        </>
-    )
-}
+      <>
+        {!showCurrent ? (
+          <div className="current-project">
+            <div className="another line">
+              <h2>Current Projects</h2> -{' '}
+              <button className="new-buttons" onClick={() => onNavigate('currentproject')}><i className="fa-solid fa-arrow-left"></i></button>
+            </div>
+            <p>Oh no! You don't have any active projects right now!</p>
+          </div>
+        ) : (
+          <div className="current-project">
+            <div className="another line">
+              <h2>Current Projects</h2> -{' '}
+              <button
+                className="new-buttons"
+                onClick={() => onNavigate('currentproject')}
+              >
+                <i className="fa-solid fa-arrow-left"></i>
+              </button>
+            </div>
+            <div className="projects">
+              {projects.length === 0 ? (
+                <p>No projects available.</p>
+              ) : (
+                projects.map((project, index) => (
+                  <div key={index} className="card">
+                    <h3>{project.title}</h3>
+                    <p>{project.description}</p>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        )}
+      </>
+    );
+  }
 
 function FindProjects({onNavigate}) {
     return (
@@ -112,28 +161,88 @@ function FindProjects({onNavigate}) {
             <div className='current-project'>
                 <div className='another line'><h2>find projects</h2> - <button className='new-buttons' onClick={() => onNavigate('findproject')}><i className="fa-solid fa-arrow-left"></i></button></div>
                 <div className='projects'>
-                    <div className='one-project'></div>
-                    <div className='one-project'></div>
-                    <div className='one-project'></div>
+                    <div className='one-project'><SwipeableCards onNavigate={onNavigate} /></div>
                 </div>
             </div>
         </>
     )
 }
 
-function MyProjects({onNavigate}) {
+function MyProjects({userData, onNavigate}) {
+    // State to manage current visibility and project data
+    const [showCurrent, setShowCurrent] = useState(true);
+    const [projects, setProjects] = useState([]);
+    const [loading, setLoading] = useState(true); // To show loading state
+    const [error, setError] = useState(null); // To handle error state
+  
+    // Fetch projects when the component mounts
+    useEffect(() => {
+      const fetchProjects = async () => {
+        try {
+          const response = await fetch('http://localhost:4000/api/projects'); // Replace with the correct API URL
+          if (!response.ok) {
+            throw new Error('Failed to fetch projects');
+          }
+          const data = await response.json();
+  
+          // Limit to the first 3 projects
+          setProjects(data.slice(0, 3)); // Only get the first 3 projects
+          setLoading(false);
+        } catch (err) {
+          setError(err.message);
+          setLoading(false);
+        }
+      };
+  
+      fetchProjects();
+    }, []);
+  
+    if (loading) {
+      return <p>Loading projects...</p>;
+    }
+  
+    if (error) {
+      return <p>Error: {error}</p>;
+    }
+  
     return (
-        <>
-            <div className='current-project'>
-            <div className='another line'><h2>my projects</h2> - <button className='new-buttons' onClick={() => onNavigate('myproject')}><i className="fa-solid fa-arrow-left"></i></button></div>
-                <div className='projects'>
-                    <div className='one-project'></div>
-                    <div className='one-project'></div>
-                    <div className='one-project'></div>
-                </div>
+      <>
+        {!showCurrent ? (
+          <div className="current-project">
+            <div className="another line">
+              <h2>my projects</h2> -{' '}
+              <button className="new-buttons" onClick={() => onNavigate('myproject')}><i className="fa-solid fa-arrow-left"></i></button>
             </div>
-        </>
-    )
+            <p>Oh no! You don't have any active projects right now!</p>
+          </div>
+        ) : (
+          <div className="current-project">
+            <div className="another line">
+              <h2>my projects</h2> -{' '}
+              <button
+                className="new-buttons"
+                onClick={() => onNavigate('myproject')}
+              >
+                <i className="fa-solid fa-arrow-left"></i>
+              </button>
+            </div>
+            <div className="projects">
+              {projects.length === 0 ? (
+                <p>No projects available.</p>
+              ) : (
+                projects.map((project, index) => (
+                  <div key={index} className="card">
+                    <h3>{project.title}</h3>
+                    <p>{project.description}</p>
+                    <button className='edit-buttons' onClick={() => onNavigate('myprojectdetail')}>Explore</button>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        )}
+      </>
+    );
 }
 
 

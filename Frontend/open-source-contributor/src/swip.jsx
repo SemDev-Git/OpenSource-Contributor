@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useSwipeable } from "react-swipeable";
 
 const SwipeableCard = ({ onSwipeLeft, onSwipeRight, children }) => {
@@ -13,43 +13,75 @@ const SwipeableCard = ({ onSwipeLeft, onSwipeRight, children }) => {
   return (
     <div
       {...swipeHandlers}
-      style={{
-        width: "250px",
-        height: "200px",
-        padding: "18px",
-        borderRadius: "10px",
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-        backgroundColor: "#62B6B7",
-        display: "flex",
-        fontFamily: "Poppins", 
-        justifyContent: "center",
-        alignItems: "center",
-        fontSize: "20px",
-        textAlign: "center",
-        userSelect: "none",
-        color: "#CBEDD5",
-        fontWeight: "600",
-      }}
     >
       {children}
     </div>
   );
 };
 
-const SwipeableCards = () => {
-  const handleSwipeLeft = () => {
-    alert("Swiped Left!");
+const SwipeableCards = ({ onNavigate }) => {
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [visibleCards, setVisibleCards] = useState([]); // Track visible cards
+
+  // Fetch the project data from the backend
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch('http://localhost:4000/api/projects');  // Replace with the correct API URL
+        if (!response.ok) {
+          throw new Error('Failed to fetch projects');
+        }
+        const data = await response.json();
+        setProjects(data); // Assuming the API returns an array of projects
+        setLoading(false);
+        setVisibleCards(data.map((_, index) => index)); // Initialize visible cards
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
+  const handleSwipeLeft = (index) => {
+    // Remove the card at the given index
+    setVisibleCards(visibleCards.filter((cardIndex) => cardIndex !== index));
   };
 
   const handleSwipeRight = () => {
     alert("Swiped Right!");
   };
 
+  // Render loading or error message if applicable
+  if (loading) {
+    return <p>Loading projects...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
   return (
-    <div>
-      <SwipeableCard onSwipeLeft={handleSwipeLeft} onSwipeRight={handleSwipeRight}>
-        Swipe Me!
-      </SwipeableCard>
+    <div className="cards-line">
+      {projects.length === 0 ? (
+        <p>No projects available.</p>
+      ) : (
+        visibleCards.map((index) => (
+          <SwipeableCard
+            key={index}
+            onSwipeLeft={() => handleSwipeLeft(index)}  // Pass the index for the card
+            onSwipeRight={handleSwipeRight}
+          >
+            <div className="card">
+              <h3>{projects[index].title}</h3>
+              <p>{projects[index].description}</p>
+            </div>
+          </SwipeableCard>
+        ))
+      )}
     </div>
   );
 };
